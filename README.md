@@ -4,7 +4,7 @@ Submitted by: **Jingyi He**
 
 About this web app: **UnityGrid Plaza is a virtual community space where users can explore a visual plaza map, select different locations, and view events happening at each location. The app uses a React frontend, an Express backend API, and a Render PostgreSQL database to store locations and events. Users can also view all events on a separate Events page, filter events by location, and see countdowns showing how much time remains before each event.**
 
-Time spent: **X** hours
+Time spent: **5.5** hours
 
 ## Required Features
 

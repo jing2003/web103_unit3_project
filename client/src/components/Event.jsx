@@ -1,62 +1,57 @@
-import React, { useState, useEffect } from 'react'
-import '../css/Event.css'
+import React from "react";
+import "../css/Event.css";
 
-const Event = (props) => {
+const Event = ({ title, date, time, image, remaining }) => {
+  const eventDate = new Date(remaining);
+  const today = new Date();
+  const difference = eventDate - today;
+  const daysRemaining = Math.ceil(difference / (1000 * 60 * 60 * 24));
+  const eventPassed = difference < 0;
 
-    const [event, setEvent] = useState([])
-    const [time, setTime] = useState([])
-    const [remaining, setRemaining] = useState([])
+  const getRemainingText = () => {
+    if (!remaining) {
+      return "";
+    }
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const eventData = await EventsAPI.getEventsById(props.id)
-                setEvent(eventData)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [])
+    if (daysRemaining < 0) {
+      return "This event has already passed";
+    }
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const result = await dates.formatTime(event.time)
-                setTime(result)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [event])
+    if (daysRemaining === 0) {
+      return "This event is today!";
+    }
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const timeRemaining = await dates.formatRemainingTime(event.remaining)
-                setRemaining(timeRemaining)
-                dates.formatNegativeTimeRemaining(remaining, event.id)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [event])
+    if (daysRemaining === 1) {
+      return "1 day remaining";
+    }
 
-    return (
-        <article className='event-information'>
-            <img src={event.image} />
+    return `${daysRemaining} days remaining`;
+  };
 
-            <div className='event-information-overlay'>
-                <div className='text'>
-                    <h3>{event.title}</h3>
-                    <p><i className="fa-regular fa-calendar fa-bounce"></i> {event.date} <br /> {time}</p>
-                    <p id={`remaining-${event.id}`}>{remaining}</p>
-                </div>
-            </div>
-        </article>
-    )
-}
+  return (
+    <article
+      className={
+        eventPassed ? "event-information passed-event" : "event-information"
+      }
+    >
+      <img src={image} alt={title} />
 
-export default Event
+      <div className="event-information-overlay">
+        <div className="text">
+          <h3>{title}</h3>
+          <p>
+            <i className="fa-regular fa-calendar fa-bounce"></i> {date}
+            <br />
+            {time}
+          </p>
+
+          <p className={eventPassed ? "negative-time-remaining" : ""}>
+            {getRemainingText()}
+          </p>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export default Event;
